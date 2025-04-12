@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class ListInvoiceResponse(
     @Json(name = "items")
-    val items: List<InvoiceDto>,
+    val items: List<InvoiceResponse>,
     @Json(name = "total")
     val total: Int,
     @Json(name = "current_page") val currentPage: Int,
@@ -12,7 +12,7 @@ data class ListInvoiceResponse(
     val pages: Int,
 )
 
-data class InvoiceDto(
+data class InvoiceResponse(
     val id: Int,
     @Json(name = "invoice_number") val invoiceNumber: String,
     @Json(name = "issue_date") val issueDate: String,

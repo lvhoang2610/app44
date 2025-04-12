@@ -1,7 +1,7 @@
-package com.example.app44.data.api
+package com.example.app44.data.network
 
 import android.content.Context
-import com.example.app44.data.repository.DocumentApi
+import com.example.app44.data.api.DocumentApi
 import com.example.app44.sharepref.TokenManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -1,4 +1,4 @@
-package com.example.app44.data.repository
+package com.example.app44.data.api
 
 import com.example.app44.data.dto.BillOfLadingDto
 import com.example.app44.data.dto.ContractDto
@@ -6,6 +6,9 @@ import com.example.app44.data.dto.DeliveryNoteDto
 import com.example.app44.data.dto.response.ListInvoiceResponse
 import com.example.app44.data.dto.request.LoginRequest
 import com.example.app44.data.dto.OtherDocumentDto
+import com.example.app44.data.dto.request.PrintLogRequest
+import com.example.app44.data.dto.response.ListPrintLogResponse
+import com.example.app44.data.dto.response.PrintLogResponse
 import com.example.app44.data.dto.response.TokenResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,4 +41,17 @@ interface DocumentApi {
 
     @GET("/other-documents")
     suspend fun getOtherDocuments(): List<OtherDocumentDto>
+
+    @POST("api/v1/print-log")
+    suspend fun printLog(
+        @Body printLogRequest: PrintLogRequest
+    ): PrintLogResponse
+
+    @GET("api/v1/print-log")
+    suspend fun getListPrintLog(
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("from_date") fromDate: String?,
+        @Query("to_date") toDate: String?
+    ): ListPrintLogResponse
 }

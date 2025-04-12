@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.app44.core.PDFDownloader
+import com.example.app44.data.dto.request.PrintLogRequest
+import com.example.app44.enums.PrintLogType
 import com.example.app44.navigation.Screen
 import com.example.app44.view.component.InvoiceItem
 import com.example.app44.viewmodel.PrintInvoiceViewModel
@@ -57,6 +59,12 @@ fun PrintInvoiceScreen(navHostController: NavHostController) {
                     navHostController.navigate(Screen.PreviewPDF.createRoute(invoice.filePath))
                 },
                 onClickDownLoad = {
+                    viewModel.printLog(
+                        PrintLogRequest(
+                            objectId = "${invoice.id}",
+                            type = PrintLogType.INVOICE.type,
+                        )
+                    )
                     PDFDownloader.downloadPdf(
                         context,
                         invoice.filePath,

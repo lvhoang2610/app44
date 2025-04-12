@@ -2,7 +2,7 @@ package com.example.app44.domain
 
 import com.example.app44.core.BaseResult
 import com.example.app44.data.dto.request.LoginRequest
-import com.example.app44.data.repository.DocumentApi
+import com.example.app44.data.api.DocumentApi
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
