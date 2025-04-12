@@ -31,6 +31,12 @@ fun PrintLogItem(
             modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
+                text = "Mã số: ${printLog.id}",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Text(
                 text = "Loại giấy tờ: ${PrintLogType.fromType(printLog.type)}",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold

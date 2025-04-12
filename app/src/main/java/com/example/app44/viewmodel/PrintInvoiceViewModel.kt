@@ -31,9 +31,6 @@ class PrintInvoiceViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
     private var endReached = false
 
-    init {
-        loadDocuments()
-    }
 
     fun printLog(printLogRequest: PrintLogRequest) {
         viewModelScope.launch {

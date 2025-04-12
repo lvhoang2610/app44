@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app44.core.BaseResult
 import com.example.app44.data.dto.request.PrintLogRequest
-import com.example.app44.data.dto.response.OtherDocumentResponse
+import com.example.app44.data.dto.response.ContractResponse
+import com.example.app44.domain.PrintContractUseCase
 import com.example.app44.domain.PrintLogUseCase
-import com.example.app44.domain.PrintOtherDocumentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,18 +16,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PrintOtherDocumentViewModel @Inject constructor(
-    private val printOtherDocumentUseCase: PrintOtherDocumentUseCase,
+class PrintContractViewModel @Inject constructor(
+    private val printContractUseCase: PrintContractUseCase,
     private val printLogUseCase: PrintLogUseCase
 ) : ViewModel() {
 
-    private val _listOtherDoc = MutableStateFlow<List<OtherDocumentResponse>>(emptyList())
-    val listOtherDoc: StateFlow<List<OtherDocumentResponse>> = _listOtherDoc
+    private val _listContract = MutableStateFlow<List<ContractResponse>>(emptyList())
+    val listContract: StateFlow<List<ContractResponse>> = _listContract
 
     private var currentPage = 1
     private val pageSize = 10
     private var _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
     private var endReached = false
 
     fun printLog(printLogRequest: PrintLogRequest) {
@@ -44,12 +43,12 @@ class PrintOtherDocumentViewModel @Inject constructor(
         }
     }
 
-    fun loadOtherDocs() {
+    fun loadContracts() {
         if (_isLoading.value || endReached) return
         viewModelScope.launch {
             _isLoading.value = true
 
-            val result = printOtherDocumentUseCase.execute(
+            val result = printContractUseCase.execute(
                 page = currentPage,
                 pageSize = pageSize,
                 fromDate = null,
@@ -62,7 +61,7 @@ class PrintOtherDocumentViewModel @Inject constructor(
                     if (newItems.isEmpty()) {
                         endReached = true
                     } else {
-                        _listOtherDoc.update { it + newItems }
+                        _listContract.update { it + newItems }
                         currentPage++
                     }
                 }

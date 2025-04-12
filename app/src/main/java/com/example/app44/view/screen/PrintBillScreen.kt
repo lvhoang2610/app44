@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,19 +19,16 @@ import com.example.app44.data.dto.request.PrintLogRequest
 import com.example.app44.enums.PrintLogType
 import com.example.app44.navigation.Screen
 import com.example.app44.view.component.InvoiceItem
-import com.example.app44.viewmodel.PrintInvoiceViewModel
+import com.example.app44.viewmodel.PrintBillViewModel
+import com.example.app44.viewmodel.PrintContractViewModel
 
 @Composable
-fun PrintInvoiceScreen(navHostController: NavHostController) {
-    val viewModel: PrintInvoiceViewModel = hiltViewModel()
-    val invoices by viewModel.listInvoice.collectAsState()
-    val loadingState by viewModel.isLoading.collectAsState()
+fun PrintBillScreen(navHostController: NavHostController) {
+    val viewModel: PrintBillViewModel = hiltViewModel()
+    val listContract by viewModel.listBill.collectAsState()
     val listState = rememberLazyListState()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.loadDocuments()
-    }
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
@@ -41,32 +37,34 @@ fun PrintInvoiceScreen(navHostController: NavHostController) {
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
 
                 if (lastVisibleItem >= totalItems - 1) {
-                    viewModel.loadDocuments()
+                    viewModel.loadBills()
                 }
             }
     }
+
+
     LazyColumn(
         state = listState
     ) {
-        items(invoices) { invoice ->
+        items(listContract) { contract ->
             InvoiceItem(
-                title = invoice.invoiceNumber,
-                releaseDate = invoice.issueDate,
-                filePath = invoice.filePath,
+                title = contract.billNumber,
+                releaseDate = contract.issueDate,
+                filePath = contract.filePath,
                 onClickPreview = {
-                    navHostController.navigate(Screen.PreviewPDF.createRoute(invoice.filePath))
+                    navHostController.navigate(Screen.PreviewPDF.createRoute(contract.filePath))
                 },
                 onClickDownLoad = {
                     viewModel.printLog(
                         PrintLogRequest(
-                            objectId = "${invoice.id}",
-                            type = PrintLogType.INVOICE.type,
+                            objectId = "${contract.id}",
+                            type = PrintLogType.BILL.type,
                         )
                     )
                     PDFDownloader.downloadPdf(
                         context,
-                        invoice.filePath,
-                        invoice.invoiceNumber,
+                        contract.filePath,
+                        contract.billNumber,
                     )
                 },
             )

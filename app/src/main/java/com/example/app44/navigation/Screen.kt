@@ -20,10 +20,10 @@ sealed class Screen(
     object MainScreen : Screen("main_screen")
 
     object PrintInvoice : Screen("print_invoice", "Hóa đơn", Icons.Default.Home)
-    object PrintExportForm : Screen("print_export_form", "Xuất kho", Icons.Default.Info)
-    object PrintDelivery : Screen("print_delivery", "Vận đơn", Icons.Default.AccountBox)
+    object PrintDelivery : Screen("print_delivery", "Xuất kho", Icons.Default.Info)
+    object PrintBill : Screen("print_bill", "Vận đơn", Icons.Default.AccountBox)
     object PrintContract : Screen("print_contract", "HĐ điện tử", Icons.Default.ShoppingCart)
-    object PrintOthers : Screen("print_others", "Khác", Icons.Default.Settings)
+    object PrintOthers : Screen("print_others", "Chứng từ khác", Icons.Default.Settings)
     object History : Screen("history", "Lịch sử In", Icons.Default.Build)
 
     object PreviewPDF :

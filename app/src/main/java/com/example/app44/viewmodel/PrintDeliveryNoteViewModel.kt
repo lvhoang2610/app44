@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app44.core.BaseResult
 import com.example.app44.data.dto.request.PrintLogRequest
-import com.example.app44.data.dto.response.OtherDocumentResponse
+import com.example.app44.data.dto.response.DeliveryNoteResponse
+import com.example.app44.domain.PrintDeliveryNoteUseCase
 import com.example.app44.domain.PrintLogUseCase
-import com.example.app44.domain.PrintOtherDocumentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,19 +16,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PrintOtherDocumentViewModel @Inject constructor(
-    private val printOtherDocumentUseCase: PrintOtherDocumentUseCase,
+class PrintDeliveryNoteViewModel @Inject constructor(
+    private val printDeliveryNoteUseCase: PrintDeliveryNoteUseCase,
     private val printLogUseCase: PrintLogUseCase
 ) : ViewModel() {
 
-    private val _listOtherDoc = MutableStateFlow<List<OtherDocumentResponse>>(emptyList())
-    val listOtherDoc: StateFlow<List<OtherDocumentResponse>> = _listOtherDoc
+    private val _listDeliveryNotes = MutableStateFlow<List<DeliveryNoteResponse>>(emptyList())
+    val listDeliveryNotes: StateFlow<List<DeliveryNoteResponse>> = _listDeliveryNotes
 
     private var currentPage = 1
     private val pageSize = 10
     private var _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
     private var endReached = false
+
+    init {
+        loadDeliveryNotes()
+    }
 
     fun printLog(printLogRequest: PrintLogRequest) {
         viewModelScope.launch {
@@ -44,12 +47,12 @@ class PrintOtherDocumentViewModel @Inject constructor(
         }
     }
 
-    fun loadOtherDocs() {
+    fun loadDeliveryNotes() {
         if (_isLoading.value || endReached) return
         viewModelScope.launch {
             _isLoading.value = true
 
-            val result = printOtherDocumentUseCase.execute(
+            val result = printDeliveryNoteUseCase.execute(
                 page = currentPage,
                 pageSize = pageSize,
                 fromDate = null,
@@ -62,7 +65,7 @@ class PrintOtherDocumentViewModel @Inject constructor(
                     if (newItems.isEmpty()) {
                         endReached = true
                     } else {
-                        _listOtherDoc.update { it + newItems }
+                        _listDeliveryNotes.update { it + newItems }
                         currentPage++
                     }
                 }

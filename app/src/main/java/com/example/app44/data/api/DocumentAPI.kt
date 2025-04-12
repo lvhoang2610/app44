@@ -1,11 +1,13 @@
 package com.example.app44.data.api
 
-import com.example.app44.data.dto.BillOfLadingDto
-import com.example.app44.data.dto.ContractDto
-import com.example.app44.data.dto.DeliveryNoteDto
+import com.example.app44.data.dto.request.ForgotPasswordRequest
 import com.example.app44.data.dto.response.ListInvoiceResponse
 import com.example.app44.data.dto.request.LoginRequest
 import com.example.app44.data.dto.request.PrintLogRequest
+import com.example.app44.data.dto.response.ForgotPasswordResponse
+import com.example.app44.data.dto.response.ListBillResponse
+import com.example.app44.data.dto.response.ListContractResponse
+import com.example.app44.data.dto.response.ListDeliveryNoteResponse
 import com.example.app44.data.dto.response.ListPrintLogResponse
 import com.example.app44.data.dto.response.OtherDocumentListResponse
 import com.example.app44.data.dto.response.PrintLogResponse
@@ -30,14 +32,29 @@ interface DocumentApi {
         @Query("to_date") toDate: String?
     ): ListInvoiceResponse
 
-    @GET("/delivery-notes")
-    suspend fun getDeliveryNotes(): List<DeliveryNoteDto>
+    @GET("/api/v1/delivery-note/")
+    suspend fun getDeliveryNotes(
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("from_date") fromDate: String?,
+        @Query("to_date") toDate: String?
+    ): ListDeliveryNoteResponse
 
-    @GET("/bills-of-lading")
-    suspend fun getBillsOfLading(): List<BillOfLadingDto>
+    @GET("/api/v1/bill/")
+    suspend fun getBills(
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("from_date") fromDate: String?,
+        @Query("to_date") toDate: String?
+    ): ListBillResponse
 
-    @GET("/contracts")
-    suspend fun getContracts(): List<ContractDto>
+    @GET("/api/v1/contract/")
+    suspend fun getContracts(
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("from_date") fromDate: String?,
+        @Query("to_date") toDate: String?
+    ): ListContractResponse
 
     @GET("/api/v1/other-document/")
     suspend fun getOtherDocuments(
@@ -59,4 +76,9 @@ interface DocumentApi {
         @Query("from_date") fromDate: String?,
         @Query("to_date") toDate: String?
     ): ListPrintLogResponse
+
+    @POST("/api/v1/auth/reset-password")
+    suspend fun resetPassword(
+        @Body payload: ForgotPasswordRequest
+    ): ForgotPasswordResponse
 }

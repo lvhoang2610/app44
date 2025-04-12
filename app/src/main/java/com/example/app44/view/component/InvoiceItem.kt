@@ -14,11 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.app44.data.dto.response.InvoiceResponse
 
 @Composable
 fun InvoiceItem(
-    tile: String,
+    title: String,
     releaseDate: String,
     filePath: String,
     onClickPreview: () -> Unit = {},
@@ -33,11 +32,11 @@ fun InvoiceItem(
             modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = tile, style = MaterialTheme.typography.titleMedium
+                text = "Mã số: $title", style = MaterialTheme.typography.titleMedium
             )
 
             Text(
-                text = "Ngày phát hành: $releaseDate",
+                text = "Ngày tạo: $releaseDate",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -60,7 +59,7 @@ fun InvoiceItem(
 @Composable
 fun PreviewInvoiceItem() {
     InvoiceItem(
-        tile = "INV-123456",
+        title = "INV-123456",
         releaseDate = "2023-10-01",
         filePath = "/path/to/invoice.pdf"
     )

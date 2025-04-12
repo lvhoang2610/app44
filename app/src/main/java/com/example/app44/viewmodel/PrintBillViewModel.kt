@@ -1,9 +1,13 @@
 package com.example.app44.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app44.core.BaseResult
-import com.example.app44.data.dto.response.PrintLogResponse
+import com.example.app44.data.dto.request.PrintLogRequest
+import com.example.app44.data.dto.response.BillResponse
+import com.example.app44.data.dto.response.ContractResponse
+import com.example.app44.domain.PrintBillUseCase
 import com.example.app44.domain.PrintLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,29 +17,43 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel @Inject constructor(
+class PrintBillViewModel @Inject constructor(
+    private val printBillUseCase: PrintBillUseCase,
     private val printLogUseCase: PrintLogUseCase
 ) : ViewModel() {
 
-    private val _listPrintLog = MutableStateFlow<List<PrintLogResponse>>(emptyList())
-    val listPrintLog: StateFlow<List<PrintLogResponse>> = _listPrintLog
+    private val _listBill = MutableStateFlow<List<BillResponse>>(emptyList())
+    val listBill: StateFlow<List<BillResponse>> = _listBill
 
     private var currentPage = 1
     private val pageSize = 10
     private var _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
     private var endReached = false
 
     init {
-        loadPrintLogs()
+        loadBills()
     }
 
-    fun loadPrintLogs() {
+    fun printLog(printLogRequest: PrintLogRequest) {
+        viewModelScope.launch {
+            when (val result = printLogUseCase.execute(printLogRequest)) {
+                is BaseResult.Success -> {
+                    Log.d("PrintLog", "Print log successful: ${result.data}")
+                }
+
+                is BaseResult.Error -> {
+                    // handle error
+                }
+            }
+        }
+    }
+
+    fun loadBills() {
         if (_isLoading.value || endReached) return
         viewModelScope.launch {
             _isLoading.value = true
 
-            val result = printLogUseCase.getListPrintLog(
+            val result = printBillUseCase.execute(
                 page = currentPage,
                 pageSize = pageSize,
                 fromDate = null,
@@ -48,7 +66,7 @@ class HistoryViewModel @Inject constructor(
                     if (newItems.isEmpty()) {
                         endReached = true
                     } else {
-                        _listPrintLog.update { it + newItems }
+                        _listBill.update { it + newItems }
                         currentPage++
                     }
                 }

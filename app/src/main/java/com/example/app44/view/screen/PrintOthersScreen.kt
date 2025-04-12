@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,6 +29,10 @@ fun PrintOthersScreen(
     val listState = rememberLazyListState()
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        viewModel.loadOtherDocs()
+    }
+
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
             .collect { layoutInfo ->
@@ -43,12 +46,11 @@ fun PrintOthersScreen(
     }
 
     LazyColumn(
-        modifier = Modifier.padding(20.dp),
         state = listState
     ) {
         items(listOtherDoc) { otherDoc ->
             InvoiceItem(
-                tile = otherDoc.documentNumber,
+                title = otherDoc.documentNumber,
                 releaseDate = otherDoc.issueDate,
                 filePath = otherDoc.filePath,
                 onClickPreview = {
@@ -58,7 +60,7 @@ fun PrintOthersScreen(
                     viewModel.printLog(
                         PrintLogRequest(
                             objectId = "${otherDoc.id}",
-                            type = PrintLogType.INVOICE.type,
+                            type = PrintLogType.OTHER_DOCUMENT.type,
                         )
                     )
                     PDFDownloader.downloadPdf(
