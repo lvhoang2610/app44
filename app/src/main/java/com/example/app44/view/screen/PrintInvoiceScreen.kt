@@ -48,13 +48,18 @@ fun PrintInvoiceScreen(navHostController: NavHostController) {
                 }
             }
     }
-
+    if (loadingState) {
+        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+    }
     LazyColumn(
         modifier = Modifier.padding(20.dp),
         state = listState
     ) {
         items(invoices) { invoice ->
-            InvoiceItem(invoice,
+            InvoiceItem(
+                tile = invoice.invoiceNumber,
+                releaseDate = invoice.issueDate,
+                filePath = invoice.filePath,
                 onClickPreview = {
                     navHostController.navigate(Screen.PreviewPDF.createRoute(invoice.filePath))
                 },
@@ -70,13 +75,8 @@ fun PrintInvoiceScreen(navHostController: NavHostController) {
                         invoice.filePath,
                         invoice.invoiceNumber,
                     )
-                }
+                },
             )
-        }
-        item {
-            if (loadingState) {
-                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
-            }
         }
     }
 }

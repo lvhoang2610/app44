@@ -23,10 +23,3 @@ import com.squareup.moshi.Json
         @Json(name = "issue_date") val issueDate: String,
         @Json(name = "file_path") val filePath: String
     )
-
-    data class OtherDocumentDto(
-        val id: Int,
-        @Json(name = "document_number") val documentNumber: String,
-        @Json(name = "issue_date") val issueDate: String,
-        @Json(name = "file_path") val filePath: String
-    )

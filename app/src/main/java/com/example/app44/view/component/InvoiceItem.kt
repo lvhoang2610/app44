@@ -18,7 +18,9 @@ import com.example.app44.data.dto.response.InvoiceResponse
 
 @Composable
 fun InvoiceItem(
-    invoiceItem: InvoiceResponse,
+    tile: String,
+    releaseDate: String,
+    filePath: String,
     onClickPreview: () -> Unit = {},
     onClickDownLoad: () -> Unit = {},
 ) {
@@ -31,18 +33,14 @@ fun InvoiceItem(
             modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = invoiceItem.invoiceNumber, style = MaterialTheme.typography.titleMedium
+                text = tile, style = MaterialTheme.typography.titleMedium
             )
 
             Text(
-                text = "Ngày phát hành: ${invoiceItem.issueDate}",
+                text = "Ngày phát hành: $releaseDate",
                 style = MaterialTheme.typography.bodyMedium
             )
 
-            Text(
-                text = "Đường dẫn: ${invoiceItem.filePath}",
-                style = MaterialTheme.typography.labelMedium
-            )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -62,11 +60,8 @@ fun InvoiceItem(
 @Composable
 fun PreviewInvoiceItem() {
     InvoiceItem(
-        invoiceItem = InvoiceResponse(
-            id = 1,
-            invoiceNumber = "INV-123456",
-            issueDate = "2023-10-01",
-            filePath = "/path/to/invoice.pdf"
-        )
+        tile = "INV-123456",
+        releaseDate = "2023-10-01",
+        filePath = "/path/to/invoice.pdf"
     )
 }
