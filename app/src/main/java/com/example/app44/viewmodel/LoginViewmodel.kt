@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class LoginUiState(
-    val email: String = "admin",
-    val password: String = "12345678@Abc",
+    val email: String = "",
+    val password: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val isLoginSuccess: Boolean = false
